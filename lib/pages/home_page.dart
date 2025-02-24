@@ -5,6 +5,7 @@ import 'package:news_app_api/models/slider_model.dart';
 import 'package:news_app_api/services/data.dart';
 import 'package:news_app_api/services/slider_data.dart';
 import 'package:news_app_api/widgets/category_tile.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +18,8 @@ class _HomePageState extends State<HomePage> {
 
   List<CategoryModel> categories = [];
   List<SliderModel> slider = [];
+
+  int activeIndex = 0;
 
   @override
   void initState() {
@@ -70,6 +73,13 @@ class _HomePageState extends State<HomePage> {
                 }),
             ),
             SizedBox(height: 30.0,),
+            Text("Breaking News",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold
+              ),
+            ),
             CarouselSlider.builder(
               itemCount: slider.length, 
               itemBuilder: (context, index, realIndex){
@@ -78,12 +88,20 @@ class _HomePageState extends State<HomePage> {
                 return buildImage(res!, index, res1!);
               }, 
               options: CarouselOptions(
-                height: 200, 
+                height: 250, 
                 enlargeCenterPage: true,
                 autoPlay: true, 
                 enlargeStrategy: CenterPageEnlargeStrategy.height, 
+                onPageChanged: (index, reason){
+                  setState(() {
+                    activeIndex = index;
+                  });
+                }
               ),
             ),
+            SizedBox(height: 30,),
+            buildIndicator(),
+            
           ],
         ),
 
@@ -91,15 +109,44 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  Widget buildIndicator() => AnimatedSmoothIndicator(
+    activeIndex: activeIndex, 
+    count: slider.length,
+    effect: const SlideEffect(dotWidth: 15, dotHeight: 15, activeDotColor: Colors.blue),
+  );
+
   Widget buildImage(String image, int index, String name) => Container(
     margin: EdgeInsets.symmetric(horizontal: 5),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Image.asset(
-        image,
-        fit: BoxFit.cover,
-        width: MediaQuery.of(context).size.width, 
+    child: Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset(
+            image,
+            height: 250,
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width, 
+            ),
         ),
+        Container(
+          height: 250,
+          padding: EdgeInsets.only(left: 10),
+          margin: EdgeInsets.only(top: 170),
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            color: Colors.black26,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            )
+          ),
+          child: Text(name, 
+          style: const TextStyle(
+            color: Colors.white, 
+            fontSize: 20.0, 
+            fontWeight: FontWeight.bold),),
+        )
+      ],
     ),
   );
 }
