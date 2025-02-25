@@ -73,13 +73,29 @@ class _HomePageState extends State<HomePage> {
                 }),
             ),
             SizedBox(height: 30.0,),
-            Text("Breaking News",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold
+            const Padding(
+              padding: EdgeInsets.only(left: 10.0, right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Breaking News",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  Text("View all",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
+            SizedBox(height: 30.0,),
             CarouselSlider.builder(
               itemCount: slider.length, 
               itemBuilder: (context, index, realIndex){
@@ -100,7 +116,30 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(height: 30,),
-            buildIndicator(),
+            Center(child: buildIndicator()),
+            SizedBox(height: 30.0,),
+            const Padding(
+              padding: EdgeInsets.only(left: 10.0, right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Trending News",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  Text("View all",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             
           ],
         ),
@@ -112,7 +151,10 @@ class _HomePageState extends State<HomePage> {
   Widget buildIndicator() => AnimatedSmoothIndicator(
     activeIndex: activeIndex, 
     count: slider.length,
-    effect: const SlideEffect(dotWidth: 15, dotHeight: 15, activeDotColor: Colors.blue),
+    effect: const SlideEffect(
+      dotWidth: 15, 
+      dotHeight: 15, 
+      activeDotColor: Colors.blue),
   );
 
   Widget buildImage(String image, int index, String name) => Container(
