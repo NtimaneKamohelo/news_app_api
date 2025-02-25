@@ -55,96 +55,150 @@ class _HomePageState extends State<HomePage> {
       //---End of APPBAR
 
       //---body---//
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 10.0),
-              height: 70,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
-                itemBuilder: (context, index){
-                  return CategoryTile(
-                    image: categories[index].image, //if index is zero takes first item that appears 
-                    categoryName: categories[index].categoryName,
-                  ).categoryTile();
-                }),
-            ),
-            SizedBox(height: 30.0,),
-            const Padding(
-              padding: EdgeInsets.only(left: 10.0, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Breaking News",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  Text("View all",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(left: 10.0),
+                height: 70,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  itemBuilder: (context, index){
+                    return CategoryTile(
+                      image: categories[index].image, //if index is zero takes first item that appears 
+                      categoryName: categories[index].categoryName,
+                    ).categoryTile();
+                  }),
               ),
-            ),
-            SizedBox(height: 30.0,),
-            CarouselSlider.builder(
-              itemCount: slider.length, 
-              itemBuilder: (context, index, realIndex){
-                String? res = slider[index].image;
-                String? res1 = slider[index].name;
-                return buildImage(res!, index, res1!);
-              }, 
-              options: CarouselOptions(
-                height: 250, 
-                enlargeCenterPage: true,
-                autoPlay: true, 
-                enlargeStrategy: CenterPageEnlargeStrategy.height, 
-                onPageChanged: (index, reason){
-                  setState(() {
-                    activeIndex = index;
-                  });
-                }
+              SizedBox(height: 30.0,),
+              const Padding(
+                padding: EdgeInsets.only(left: 10.0, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Breaking News",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text("View all",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 30,),
-            Center(child: buildIndicator()),
-            SizedBox(height: 30.0,),
-            const Padding(
-              padding: EdgeInsets.only(left: 10.0, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Trending News",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
+              SizedBox(height: 30.0,),
+              CarouselSlider.builder(
+                itemCount: slider.length, 
+                itemBuilder: (context, index, realIndex){
+                  String? res = slider[index].image;
+                  String? res1 = slider[index].name;
+                  return buildImage(res!, index, res1!);
+                }, 
+                options: CarouselOptions(
+                  height: 250, 
+                  enlargeCenterPage: true,
+                  autoPlay: true, 
+                  enlargeStrategy: CenterPageEnlargeStrategy.height, 
+                  onPageChanged: (index, reason){
+                    setState(() {
+                      activeIndex = index;
+                    });
+                  }
+                ),
+              ),
+              SizedBox(height: 30,),
+              Center(child: buildIndicator()),
+              SizedBox(height: 30.0,),
+              const Padding(
+                padding: EdgeInsets.only(left: 10.0, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Trending News",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text("View all",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Trending news
+              SizedBox(height: 10.0,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Material(
+                  elevation: 3.0,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                         child:  ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                           child: Image.asset(
+                            "assets/images/technology.jpg", 
+                            height: 150, width: 150, 
+                            fit: BoxFit.cover,),
+                         ),
+                        ),
+                        SizedBox(width: 8.0,),
+                        Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width/2,
+                              child: const Text("Deep seek takes over AI and plummets the US stock market",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5.0,),
+                            Container(
+                              width: MediaQuery.of(context).size.width/2,
+                              child: const Text("ChatGPT along with famous AI",
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        
+                      ],
                     ),
                   ),
-                  Text("View all",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-            
-          ],
+            ],
+          ),
+        
+          //---End of body---//
         ),
-
-        //---End of body---//
       ),
     );
   }
