@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app_api/models/article_model.dart';
@@ -161,9 +162,10 @@ class _HomePageState extends State<HomePage> {
               Container(
                 child: ListView.builder(
                   shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
                   itemCount: articles.length, itemBuilder: (context, index){
                   return BlogTile(
-                    imageUrl: articles[index].url!, 
+                    imageUrl: articles[index].urlToImage!, 
                     title: articles[index].title!, 
                     desc: articles[index].description!,
                   );
@@ -237,55 +239,60 @@ class BlogTile extends StatelessWidget {
       onTap: (){
           
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Material(
-            elevation: 3.0,
-            borderRadius: BorderRadius.circular(10),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                  child:  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Image.network(
-                      imageUrl,
-                      height: 150, width: 150, 
-                      fit: BoxFit.cover,),
-                  ),
-                  ),
-                  SizedBox(width: 8.0,),
-                  Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width/2,
-                        child: Text(
-                          title,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+        child: Container(
+          margin: EdgeInsets.only(bottom: 10.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Material(
+              elevation: 3.0,
+              borderRadius: BorderRadius.circular(10),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                    child:  ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: CachedNetworkImage(
+                         imageUrl: imageUrl,
+                        height: 150, width: 150, 
+                        fit: BoxFit.cover,),
+                    ),
+                    ),
+                    SizedBox(width: 8.0,),
+                    Column(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width/2,
+                          child: Text(
+                            title,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 5.0,),
-                      Container(
-                        width: MediaQuery.of(context).size.width/2,
-                        child: Text(
-                          desc,
-                          style: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
+                        SizedBox(height: 5.0,),
+                        Container(
+                          width: MediaQuery.of(context).size.width/2,
+                          child: Text(
+                            desc,
+                            maxLines: 3,
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  
-                ],
+                      ],
+                    ),
+                    
+                  ],
+                ),
               ),
             ),
           ),
