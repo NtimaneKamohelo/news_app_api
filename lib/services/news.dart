@@ -23,6 +23,9 @@ class News {
             urlToImage: element["urlToImage"],
             description: element["description"],
             title: element['title'],
+            url: element['url'],
+            content: element['content'],
+            author: element['author'],
           );
           news.add(articleModel);
         }

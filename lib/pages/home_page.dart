@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app_api/models/article_model.dart';
 import 'package:news_app_api/models/category_model.dart';
 import 'package:news_app_api/models/slider_model.dart';
 import 'package:news_app_api/services/data.dart';
+import 'package:news_app_api/services/news.dart';
 import 'package:news_app_api/services/slider_data.dart';
 import 'package:news_app_api/widgets/category_tile.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -18,6 +20,8 @@ class _HomePageState extends State<HomePage> {
 
   List<CategoryModel> categories = [];
   List<SliderModel> slider = [];
+  List<ArticleModel> articles = [];
+  bool _loading = true;
 
   int activeIndex = 0;
 
@@ -25,7 +29,18 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     categories = getCategories(); //assign all list of categories saved in getCategories
     slider = getSliders(); //Called first
+    getNews();
     super.initState();
+  }
+
+  //this retrieves all news saved in the news.dart file
+  getNews() async{
+    News newsClass = News();
+    await newsClass.getNews();
+    articles = newsClass.news;
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
@@ -55,7 +70,7 @@ class _HomePageState extends State<HomePage> {
       //---End of APPBAR
 
       //---body---//
-      body: SingleChildScrollView(
+      body: _loading? Center(child: CircularProgressIndicator()): SingleChildScrollView(
         child: Container(
           child: Column(
             children: [
@@ -143,57 +158,18 @@ class _HomePageState extends State<HomePage> {
               ),
               // Trending news
               SizedBox(height: 10.0,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Material(
-                  elevation: 3.0,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                         child:  ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                           child: Image.asset(
-                            "assets/images/technology.jpg", 
-                            height: 150, width: 150, 
-                            fit: BoxFit.cover,),
-                         ),
-                        ),
-                        SizedBox(width: 8.0,),
-                        Column(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width/2,
-                              child: const Text("Deep seek takes over AI and plummets the US stock market",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 5.0,),
-                            Container(
-                              width: MediaQuery.of(context).size.width/2,
-                              child: const Text("ChatGPT along with famous AI",
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              Container(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: articles.length, itemBuilder: (context, index){
+                  return BlogTile(
+                    imageUrl: articles[index].url!, 
+                    title: articles[index].title!, 
+                    desc: articles[index].description!,
+                  );
+                }),
+              )
+              
             ],
           ),
         
@@ -245,4 +221,75 @@ class _HomePageState extends State<HomePage> {
       ],
     ),
   );
+}
+
+class BlogTile extends StatelessWidget {
+  String imageUrl, title, desc;
+  BlogTile({
+    required this.imageUrl,
+    required this.title,
+    required this.desc
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: (){
+          
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Material(
+            elevation: 3.0,
+            borderRadius: BorderRadius.circular(10),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                  child:  ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Image.network(
+                      imageUrl,
+                      height: 150, width: 150, 
+                      fit: BoxFit.cover,),
+                  ),
+                  ),
+                  SizedBox(width: 8.0,),
+                  Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width/2,
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5.0,),
+                      Container(
+                        width: MediaQuery.of(context).size.width/2,
+                        child: Text(
+                          desc,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+}
 }

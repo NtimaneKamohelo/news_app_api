@@ -13,5 +13,6 @@ class ArticleModel {
     this.description,
     this.urlToImage,
     this.url,
+    this.content,
   });
 }
